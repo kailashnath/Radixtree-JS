@@ -16,7 +16,7 @@ class Node {
     }
 
     isLeaf() {
-        return this.edges.length === 0;
+        return false;
     }
 
     removeEdge(edge) {
@@ -52,6 +52,18 @@ class Node {
 }
 
 
+class LeafNode extends Node {
+    constructor() {
+        super();
+
+    }
+
+    isLeaf() {
+        return true;
+    }
+}
+
+
 
 class RootNode extends Node {
 
@@ -81,7 +93,7 @@ class RadixTree {
     }
 
     _diff(stra, strb) {
-        let len_a = stra.length, len_b = strb.length;
+        let len_a = (stra || '').length, len_b = (strb || '').length;
         let loop_len = len_a < len_b? len_a: len_b;
 
         let index = 0;
@@ -119,11 +131,11 @@ class RadixTree {
                 let edges = [new Edge(edge.label.slice(diff_index), edge.targetNode),
                                 new Edge(str.slice(diff_index), new Node([val]))]
 
+
                 let new_node = new Node();
                 new_node.addEdges(edges);
 
                 node.removeEdge(edge);
-                console.log(str, str.slice(0, diff_index), diff_index);
                 node.addEdge(new Edge(str.slice(0, diff_index), new_node));
 
                 return;
@@ -132,27 +144,29 @@ class RadixTree {
 
         let edge = new Edge(str, new Node([val]));
         node.addEdge(edge);
+        if (node.isLeaf()) {
+            node.addEdge('', new Node(node.targetNode.vals));
+        }
         return;
     }
 
     find(prefix, parent) {
         let node = parent || this.root;
 
+        // if the node is leaf or the prefix is empty then return all the vals at current node
+        if (node.isLeaf() || prefix === "") {
+            return node.vals;
+        }
+
         for (let edge of node.edges) {
 
-            if (!edge.label) {
-                return node.vals;
-            }
             let diff_index = this._diff(prefix, edge.label);
 
-            if (diff_index > 0 && diff_index <= prefix.length) {
+            if (diff_index > 0) {
                 return this.find(prefix.slice(diff_index), edge.targetNode);
             }
         }
-
-        if (node.edges.length === 0) {
-            return node.vals;
-        }
+        return [];
     }
 }
 
