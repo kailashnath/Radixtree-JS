@@ -5,5 +5,5 @@ var data = ['hello', 'hat', 'have'];
 
 
 var tree = new Tree(data);
-console.log(tree.root);
+console.log(tree.find('ha'));
 

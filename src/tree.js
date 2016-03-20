@@ -55,7 +55,6 @@ class Node {
 class LeafNode extends Node {
     constructor() {
         super();
-
     }
 
     isLeaf() {
@@ -144,6 +143,7 @@ class RadixTree {
 
         let edge = new Edge(str, new Node([val]));
         node.addEdge(edge);
+
         if (node.isLeaf()) {
             node.addEdge('', new Node(node.targetNode.vals));
         }
@@ -171,3 +171,4 @@ class RadixTree {
 }
 
 
+module.exports = RadixTree;
