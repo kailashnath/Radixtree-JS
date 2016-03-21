@@ -138,6 +138,8 @@ var RadixTree = (function() {
             let edge = new Edge(str, new Node([val]));
             node.addEdge(edge);
 
+            // if the node is a leaf node it means that there is a term which ends at this
+            // leaft node, so we add an `empty` edge to indicate it
             if (node.isLeaf()) {
                 node.addEdge('', new Node(node.targetNode.vals));
             }
