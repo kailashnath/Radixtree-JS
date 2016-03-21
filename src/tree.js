@@ -17,7 +17,7 @@ var RadixTree = (function() {
         }
 
         isLeaf() {
-            return false;
+            return this.edges.length === 0;
         }
 
         removeEdge(edge) {
